@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Bem-vindo ao Quiz de Matemática</h1>
+<p>Escolha um tipo de cálculo:</p>
+<a href="{{ url_for('quiz', tipo='adicao') }}">Adição</a>
+<a href="{{ url_for('quiz', tipo='subtracao') }}">Subtração</a>
+<a href="{{ url_for('quiz', tipo='multiplicacao') }}">Multiplicação</a>
+<a href="{{ url_for('quiz', tipo='divisao') }}">Divisão</a>
+{% endblock %}

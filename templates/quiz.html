@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Pergunta {{ numero }}</h2>
+<p>Quanto é {{ num1 }} {{ operador }} {{ num2 }} ?</p>
+
+<form method="POST">
+    <input type="number" name="resposta" required>
+    <button type="submit">Enviar</button>
+</form>
+
+{% if feedback %}
+    <p class="{{ 'correct' if correto else 'incorrect' }}">{{ feedback }}</p>
+{% endif %}
+{% endblock %}
