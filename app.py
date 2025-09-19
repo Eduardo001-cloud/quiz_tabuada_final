@@ -18,7 +18,7 @@ def gerar_pergunta(tipo):
     elif tipo == 'subtracao':
         resposta = num1 - num2
         operador = '-'
-    else:
+    else:  # divisão
         while num2 == 0:
             num2 = random.choice(intervalo)
         resposta = num1 // num2
@@ -32,39 +32,40 @@ def index():
 
 @app.route('/quiz/<tipo>', methods=['GET', 'POST'])
 def quiz(tipo):
+    # Inicializa sessão na primeira vez
     if "perguntas" not in session:
         session["perguntas"] = []
         session["acertos"] = 0
         session["atual"] = 0
 
+    # Se já respondeu todas, vai para resultado
     if session["atual"] >= 5:
         return redirect(url_for("resultado"))
 
+    # Quando usuário responde
     if request.method == "POST":
         resposta_usuario = int(request.form["resposta"])
         correta = session["perguntas"][-1][2]
 
         if resposta_usuario == correta:
             session["acertos"] += 1
-            feedback = "✅ Correto!"
-            correto = True
+            session["feedback"] = "✅ Correto!"
+            session["correto"] = True
         else:
-            feedback = f"❌ Errado! A resposta certa era {correta}"
-            correto = False
+            session["feedback"] = f"❌ Errado! A resposta certa era {correta}"
+            session["correto"] = False
 
-        return render_template(
-            "quiz.html",
-            num1=session["perguntas"][-1][0],
-            num2=session["perguntas"][-1][1],
-            operador=session["perguntas"][-1][3],
-            numero=session["atual"],
-            feedback=feedback,
-            correto=correto
-        )
+        # Redireciona para GET (nova pergunta)
+        return redirect(url_for("quiz", tipo=tipo))
 
+    # Gera nova pergunta
     num1, num2, resposta, operador = gerar_pergunta(tipo)
     session["perguntas"].append((num1, num2, resposta, operador))
     session["atual"] += 1
+
+    # Pega feedback da resposta anterior
+    feedback = session.pop("feedback", None)
+    correto = session.pop("correto", None)
 
     return render_template(
         "quiz.html",
@@ -72,8 +73,8 @@ def quiz(tipo):
         num2=num2,
         operador=operador,
         numero=session["atual"],
-        feedback=None,
-        correto=None
+        feedback=feedback,
+        correto=correto
     )
 
 @app.route('/resultado')
