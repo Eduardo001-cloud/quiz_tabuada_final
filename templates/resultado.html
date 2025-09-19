@@ -1,7 +1,39 @@
-{% extends "base.html" %}
-
-{% block content %}
-<h2>Resultado Final</h2>
-<p>Você acertou <strong>{{ acertos }}</strong> de <strong>{{ total }}</strong> perguntas.</p>
-<a href="{{ url_for('index') }}">Voltar ao início</a>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado do Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 22px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultado Final</h1>
+    <p>Você acertou {{ acertos }} de {{ total }} perguntas.</p>
+    <a href="{{ url_for('index') }}">Voltar ao Início</a>
+</body>
+</html>
