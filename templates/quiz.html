@@ -1,15 +1,59 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Tabuada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .pergunta {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 8px;
+            font-size: 18px;
+            width: 100px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .correto {
+            color: green;
+        }
+        .errado {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz de {{ operador }}</h1>
+    <p>Questão {{ numero }} de 5</p>
 
-{% block content %}
-<h2>Pergunta {{ numero }}</h2>
-<p>Quanto é {{ num1 }} {{ operador }} {{ num2 }} ?</p>
+    <div class="pergunta">
+        <form method="POST">
+            <label>{{ num1 }} {{ operador }} {{ num2 }} = </label>
+            <input type="number" name="resposta" required>
+            <button type="submit">Responder</button>
+        </form>
+    </div>
 
-<form method="POST">
-    <input type="number" name="resposta" required>
-    <button type="submit">Enviar</button>
-</form>
-
-{% if feedback %}
-    <p class="{{ 'correct' if correto else 'incorrect' }}">{{ feedback }}</p>
-{% endif %}
-{% endblock %}
+    {% if feedback %}
+        <div class="feedback {% if correto %}correto{% else %}errado{% endif %}">
+            {{ feedback }}
+        </div>
+    {% endif %}
+</body>
+</html>
