@@ -28,8 +28,7 @@ def gerar_pergunta(tipo):
 
 @app.route('/')
 def index():
-    # 🔥 Reseta tudo ao voltar para o início
-    session.clear()
+    session.clear()  # 🔥 Reseta tudo ao voltar para o início
     return render_template('index.html')
 
 @app.route('/quiz/<tipo>', methods=['GET', 'POST'])
@@ -39,6 +38,7 @@ def quiz(tipo):
         session["acertos"] = 0
         session["atual"] = 0
 
+    # Se já respondeu 5 perguntas, vai para o resultado
     if session["atual"] >= 5:
         return redirect(url_for("resultado"))
 
@@ -49,21 +49,27 @@ def quiz(tipo):
         if resposta_usuario == correta:
             session["acertos"] += 1
             feedback = "✅ Correto!"
-            correto = True
         else:
             feedback = f"❌ Errado! A resposta certa era {correta}"
-            correto = False
+
+        # 👉 Depois de responder, gera nova pergunta
+        if session["atual"] >= 5:
+            return redirect(url_for("resultado"))
+        
+        num1, num2, resposta, operador = gerar_pergunta(tipo)
+        session["perguntas"].append((num1, num2, resposta, operador))
+        session["atual"] += 1
 
         return render_template(
             "quiz.html",
-            num1=session["perguntas"][-1][0],
-            num2=session["perguntas"][-1][1],
-            operador=session["perguntas"][-1][3],
+            num1=num1,
+            num2=num2,
+            operador=operador,
             numero=session["atual"],
-            feedback=feedback,
-            correto=correto
+            feedback=feedback
         )
 
+    # Primeira pergunta
     num1, num2, resposta, operador = gerar_pergunta(tipo)
     session["perguntas"].append((num1, num2, resposta, operador))
     session["atual"] += 1
@@ -74,8 +80,7 @@ def quiz(tipo):
         num2=num2,
         operador=operador,
         numero=session["atual"],
-        feedback=None,
-        correto=None
+        feedback=None
     )
 
 @app.route('/resultado')
