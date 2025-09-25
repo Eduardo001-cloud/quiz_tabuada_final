@@ -28,7 +28,7 @@ def gerar_pergunta(tipo):
 
 @app.route('/')
 def index():
-    session.clear()  # 🔥 Reseta tudo ao voltar para o início
+    session.clear()  #  Reseta tudo ao voltar para o início
     return render_template('index.html')
 
 @app.route('/quiz/<tipo>', methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def quiz(tipo):
         else:
             feedback = f"❌ Errado! A resposta certa era {correta}"
 
-        # 👉 Depois de responder, gera nova pergunta
+        #  Depois de responder, gera nova pergunta
         if session["atual"] >= 5:
             return redirect(url_for("resultado"))
         
